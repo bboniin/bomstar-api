@@ -1,0 +1,172 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// criar migrate yarn prisma migrate dev
+
+model User {
+  id            String    @id @default(uuid())
+  email         String
+  password      String  
+  name          String
+  photo         String?
+  observation   String?
+  phone_number  String
+  birthday      DateTime
+  status        String    @default("pendente")
+  points        Int       @default(0)
+  created_at    DateTime? @default(now())
+  updated_at    DateTime? @default(now())
+
+  room          Room? @relation(fields: [room_id], references: [id], onDelete: Cascade)
+  room_id       String?
+
+  transactions  Transaction[]
+  rescues       Rescue[]
+  actions       Action[]
+  trunks        Trunk[]
+
+  @@map("users")
+}
+
+model Admin {
+  id            String    @id @default(uuid())
+  email         String
+  password      String  
+  name          String
+  photo         String?
+  created_at    DateTime? @default(now())
+  updated_at    DateTime? @default(now())
+
+  posts Post[]
+
+  @@map("admins")
+}
+
+model RoomAction {
+  id            String    @id @default(uuid())
+  name          String
+  description   String
+  reward        Int
+  created_at    DateTime? @default(now())
+  updated_at    DateTime? @default(now())       
+
+  room          Room  @relation(fields: [room_id], references: [id], onDelete: Cascade)
+  room_id       String
+
+  @@map("room_actions")
+}
+
+model Action {
+  id            String    @id @default(uuid())
+  name          String
+  description   String
+  observation   String?
+  response      String?
+  image         String?
+  reward        Int
+  status        String    @default("pendente")
+  created_at    DateTime? @default(now())  
+
+  user          User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id       String
+
+  @@map("actions")
+}
+
+model RoomTrunk {
+  id            String    @id @default(uuid())
+  name          String
+  description   String
+  reward_1      Int   
+  reward_2      Int    
+  reward_3      Int 
+  created_at    DateTime? @default(now())
+  updated_at    DateTime? @default(now()) 
+
+  room          Room  @relation(fields: [room_id], references: [id], onDelete: Cascade)
+  room_id       String
+
+  @@map("room_trunks")
+}
+
+model Trunk {
+  id            String    @id @default(uuid())
+  name          String
+  description   String
+  reward_1      Int   
+  reward_2      Int    
+  reward_3      Int  
+  reward        Int      
+  open          Boolean   @default(false) 
+  created_at    DateTime? @default(now())
+
+  user          User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id       String
+
+  @@map("trunks")
+}
+
+model Room {
+  id             String    @id @default(uuid())
+  name           String  
+  observation    String?
+  created_at     DateTime? @default(now())
+  updated_at     DateTime? @default(now())
+
+  users          User[]
+  room_actions   RoomAction[]
+  room_trunks    RoomTrunk[]
+
+  @@map("rooms")
+}
+
+model Rescue {
+  id            String    @id @default(uuid())
+  product_name  String
+  product_id    String
+  amount        String  
+  status        String    @default("pendente")
+  created_at    DateTime? @default(now())
+  updated_at    DateTime? @default(now())
+
+  user          User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id       String
+  
+  @@map("rescues")
+}
+
+model Transaction {
+  id           String    @id @default(uuid())
+  value        Int
+  type         String   
+  created_at   DateTime? @default(now())
+
+  user         User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id      String
+
+  @@map("transactions")
+}
+
+model Post {
+  id           String    @id @default(uuid())
+  title        String
+  text         String 
+  image        String   
+
+  created_at   DateTime? @default(now())
+  updated_at   DateTime? @default(now()) 
+  
+  admin        Admin @relation(fields: [admin_id], references: [id], onDelete: Cascade)
+  admin_id     String
+
+  @@map("posts")
+}

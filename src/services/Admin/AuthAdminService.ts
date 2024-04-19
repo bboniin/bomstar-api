@@ -1,0 +1,55 @@
+import prismaClient from '../../prisma'
+import { sign } from 'jsonwebtoken'
+import authConfig from "../../utils/auth"
+import { compare } from 'bcryptjs';
+
+interface AuthRequest {
+    email: string;
+    password: string;
+}
+
+class AuthAdminService {
+    async execute({ email, password }: AuthRequest) {
+
+        if (!password || !email) {
+            throw new Error("Email e Senha são obrigatórios")
+        }
+
+        const admin = await prismaClient.admin.findFirst({
+            where: {
+                email: email
+            }
+        })
+
+        if (!admin) {
+            throw new Error("Email e Senha não correspondem ou não existe")
+        }
+
+        const passwordMatch = await compare(password, admin.password)
+
+        if (!passwordMatch) {
+            throw new Error("Email e Senha não correspondem ou não existe")
+        }
+
+        const token = sign({
+            email: admin.email,
+            type: "admin"
+        }, authConfig.jwt.secret, {
+            subject: admin.id,
+            expiresIn: '365d'
+        })
+
+        return ({
+            user: {
+                id: admin.id,
+                name: admin.name,
+                email: admin.email,
+                photo: admin.photo,
+                photo_url: admin.photo ? "https://bomstar-data.s3.sa-east-1.amazonaws.com/" + admin.photo : ""
+            },
+            token
+        })
+    }
+}
+
+export { AuthAdminService }
