@@ -44,7 +44,7 @@ const router = Router()
 
 router.post('/session', new AuthUserController().handle)
 router.post('/session-admin', new AuthAdminController().handle)
-router.post('/user', new CreateUserController().handle)
+router.post('/user', upload.single("file"), new CreateUserController().handle)
 
 router.use(isAuthenticated)
 
