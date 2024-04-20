@@ -17,6 +17,9 @@ class GetUserService {
                 phone_number: true,
                 points: true,
                 birthday: true,
+                status: true,
+                observation: true,
+                room_id: true,
                 photo: true
             }
         })

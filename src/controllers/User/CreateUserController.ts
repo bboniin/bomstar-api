@@ -5,7 +5,6 @@ class CreateUserController {
     async handle(req: Request, res: Response) {
         const { name, email, phone_number, password, birthday } = req.body
         
-        console.log("oasdas")
         let photo = ""
 
         if (req.file) {
@@ -17,6 +16,10 @@ class CreateUserController {
         const user = await createUserService.execute({
             name, email, password, phone_number, birthday, photo
         })
+
+        if (user["photo"]) {
+            user["photo_url"] = "https://bomstar-data.s3.sa-east-1.amazonaws.com/" + user["photo"];
+        }
 
         return res.json(user)
     }

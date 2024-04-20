@@ -10,7 +10,7 @@ interface ActionRequest {
 class CreateActionService {
     async execute({ name, description, reward, room_id}: ActionRequest) {
 
-        if (!name  || !description || !reward || !room_id) {
+        if (!name || !reward || !room_id) {
             throw new Error("Nome, Descrição, Sala e Recompensa são obrigatórios")
         }
 

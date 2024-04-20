@@ -11,8 +11,8 @@ class EditActionService {
     async execute({ name, action_id, description, reward }: ActionRequest) {
 
         
-        if (!name  || !description || !reward || !action_id) {
-            throw new Error("Nome, Descrição, Id e Recompensa são obrigatórios")
+        if (!name  || !reward || !action_id) {
+            throw new Error("Nome, Id e Recompensa são obrigatórios")
         }
 
         const action = await prismaClient.roomAction.update({

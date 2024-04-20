@@ -44,8 +44,7 @@ class AuthAdminService {
                 id: admin.id,
                 name: admin.name,
                 email: admin.email,
-                photo: admin.photo,
-                photo_url: admin.photo ? "https://bomstar-data.s3.sa-east-1.amazonaws.com/" + admin.photo : ""
+                photo: admin.photo
             },
             token
         })

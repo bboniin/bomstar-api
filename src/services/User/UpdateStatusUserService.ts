@@ -23,13 +23,20 @@ class UpdateStatusUserService {
                 throw new Error("Sala do Usuário é obrigatório")
             }
         }
+
         const user = await prismaClient.user.findUnique({
             where: {
                 id: user_id,
             }
         })
 
-        console.log(user_id, user)
+        let data = {
+            status: status,
+            observation: observation || user.observation
+        }
+        if (status == "aprovado") {
+            data["room_id"] = room_id
+        }
 
         if (!user) {
             throw new Error("Usuário não encontrado")
@@ -43,11 +50,7 @@ class UpdateStatusUserService {
             where: {
                 id: user_id,
             },
-            data: {
-                status: status,
-                room_id: room_id,
-                observation: observation
-            },
+            data: data
         })
 
         return (userEdit)

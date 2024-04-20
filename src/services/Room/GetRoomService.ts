@@ -13,7 +13,8 @@ class GetRoomService {
             },
             include: {
                 room_actions: true,
-                room_trunks: true
+                room_trunks: true,
+                users: true,
             }
         })
 

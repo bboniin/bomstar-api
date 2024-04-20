@@ -12,6 +12,12 @@ class GetRoomController {
             room_id
         })
 
+        room.users.map((item) => {
+            if (item["photo"]) {
+                item["photo_url"] = "https://bomstar-data.s3.sa-east-1.amazonaws.com/" + item["photo"];
+            }
+        })
+        
         return res.json(room)
     }
 }

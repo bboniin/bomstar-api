@@ -1,6 +1,8 @@
 import { hash } from 'bcryptjs';
 import prismaClient from '../../prisma'
 import S3Storage from '../../utils/S3Storage';
+import { sign } from 'jsonwebtoken'
+import authConfig from "./../../utils/auth"
 
 interface UserRequest {
     name: string;
@@ -34,7 +36,7 @@ class CreateUserService {
             name: name,
             email: email,
             password: passwordHash,
-            birthday: birthday,
+            birthday: new Date(birthday),
             phone_number: phone_number,
             points: 0,
             status: "pendente"
@@ -49,18 +51,28 @@ class CreateUserService {
         }
 
         const user = await prismaClient.user.create({
-            data: data,
-            select: {
-                name: true,
-                email: true,
-                phone_number: true,
-                points: true,
-                birthday: true,
-                photo: true
-            }
+            data: data
         })
 
-        return (user)
+        const token = sign({
+            email: user.email,
+            type: "user"
+        }, authConfig.jwt.secret, {
+            subject: user.id,
+            expiresIn: '365d'
+        })
+
+        return ({
+            id: user.id,
+            name: user.name,
+            points: user.points,
+            email: user.email,
+            photo: user.photo,
+            birthday: user.birthday,
+            phone_number: user.phone_number,
+            status: user.status,
+            token: token
+        })
     }
 }
 

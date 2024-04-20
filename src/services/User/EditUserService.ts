@@ -13,21 +13,20 @@ interface UserRequest {
 class EditUserService {
     async execute({ name, birthday, phone_number, photo, email, user_id }: UserRequest) {
 
-        if (!name || !phone_number || !email || !birthday || !photo) {
-            throw new Error("Nome, Email, Aniversário, Telefone e Foto são obrigatórios")
+        if (email) {
+            const userAlreadyExists = await prismaClient.user.findFirst({
+                where: {
+                    email: email
+                }
+            })
+
+            if (userAlreadyExists) {
+                if (userAlreadyExists.id != user_id) {
+                    throw new Error("Email já cadastrado")
+                }
+            }
         }
         
-        const userAlreadyExists = await prismaClient.user.findFirst({
-            where: {
-                email: email
-            }
-        })
-
-        if (userAlreadyExists) {
-            if (userAlreadyExists.id != user_id) {
-                throw new Error("Email já cadastrado")
-            }
-        }
 
         const user = await prismaClient.user.findUnique({
             where: {
@@ -35,11 +34,15 @@ class EditUserService {
             }
         })
 
+        if (!user) {
+            throw new Error("Usuário não encontrado")
+        }
+
         let data = {
-            name: name,
-            email: email,
-            birthday: birthday,
-            phone_number: phone_number
+            name: name || user.name,
+            email: email || user.email,
+            birthday: birthday ? new Date(birthday) : user.birthday,
+            phone_number: phone_number || user.phone_number
         }
 
         if (photo) {

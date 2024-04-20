@@ -12,6 +12,10 @@ class AuthUserController {
             email, password
         })
 
+        if (user["photo"]) {
+            user["photo_url"] = "https://bomstar-data.s3.sa-east-1.amazonaws.com/" + user["photo"];
+        }
+        
         return res.json(user)
     }
 }

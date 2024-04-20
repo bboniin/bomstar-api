@@ -60,6 +60,8 @@ router.get('/actions', new ListActionsUserController().handle)
 router.get('/actions-room', new ListActionsRoomController().handle)
 router.post('/send-action', upload.single("file"), new SendActionController().handle)
 
+router.get('/room/:room_id', new GetRoomController().handle)
+
 router.use(isAdmin)
 
 router.post('/admin', upload.single("file"), new CreateAdminController().handle)
@@ -79,7 +81,6 @@ router.post('/post', new CreatePostController().handle)
 router.put('/post/:post_id', new EditPostController().handle)
 router.delete('/post/:post_id', new DeletePostController().handle)
 
-router.get('/room/:room_id', new GetRoomController().handle)
 router.get('/rooms', new ListRoomsController().handle)
 router.post('/room', new CreateRoomController().handle)
 router.put('/room/:room_id', new EditRoomController().handle)

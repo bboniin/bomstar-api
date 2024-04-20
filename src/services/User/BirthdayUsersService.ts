@@ -18,11 +18,9 @@ class ListUsersService {
             filter["skip"] = page * 30
             filter["take"] = 30
         }
-        console.log(1)
 
         const usersTotal = await prismaClient.user.count(filter)
 
-        console.log(2)
         const users = await prismaClient.user.findMany({
             ...filter,
             orderBy: {
@@ -30,8 +28,6 @@ class ListUsersService {
             }
         })
 
-        console.log(3)
-        console.log({users, usersTotal})
         return ({users, usersTotal})
     }
 }

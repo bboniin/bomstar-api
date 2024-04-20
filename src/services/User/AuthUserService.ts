@@ -47,9 +47,9 @@ class AuthUserService {
             photo: user.photo,
             birthday: user.birthday,
             phone_number: user.phone_number,
+            room_id: user.room_id,
             status: user.status,
             token: token,
-            photo_url: user.photo ? "https://bomstar-data.s3.sa-east-1.amazonaws.com/" + user.photo : ""
         })
     }
 }
