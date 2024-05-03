@@ -2,7 +2,7 @@ import { hash } from 'bcryptjs';
 import prismaClient from '../../prisma'
 import S3Storage from '../../utils/S3Storage';
 import { sign } from 'jsonwebtoken'
-import authConfig from "./../../utils/auth"
+import authConfig from "../../utils/auth"
 
 interface UserRequest {
     name: string;

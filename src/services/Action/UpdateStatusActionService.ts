@@ -9,8 +9,8 @@ interface UserRequest {
 class UpdateStatusActionService {
     async execute({ status, response, action_id }: UserRequest) {
         
-        if (!status || !action_id || !response) {
-            throw new Error("Id, Status e Resposta são obrigatórios")
+        if (!status || !action_id) {
+            throw new Error("Id e Status são obrigatórios")
         }
 
         if (status != "aprovado" && status != "reprovado") {
@@ -32,7 +32,23 @@ class UpdateStatusActionService {
         }
 
         if (status == "aprovado") {
-            // envio dos pontos para o usuário
+            await prismaClient.transaction.create({
+                data: {
+                    value: action.reward,
+                    type: "action",
+                    operation: "entrada",
+                    description: `Realização de Ação`,
+                    user_id: action.user.id
+                }
+            })
+            await prismaClient.user.update({
+                where: {
+                    id: action.user.id
+                },
+                data: {
+                    points: action.user.points + action.reward
+                }
+            })
         } 
 
         const actionResponse = await prismaClient.action.update({
@@ -41,7 +57,8 @@ class UpdateStatusActionService {
             },
             data: {
                 status: status,
-                response: response
+                response: response,
+                updated_at: new Date()
             },
         })
 

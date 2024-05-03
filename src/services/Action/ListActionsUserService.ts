@@ -11,19 +11,20 @@ class ListActionsUserService {
         const actionsTotal = await prismaClient.action.count({
             where: {
                 user_id: user_id,
-                status: "pendente"
             },
         })
 
         const actions = await prismaClient.action.findMany({
             where: {
                 user_id: user_id,
-                status: "pendente"
             },
             skip: page * 30,
             take: 30,
             orderBy: {
-                created_at: "asc"
+                updated_at: "desc"
+            },
+            include: {
+                user: true
             }
         })
 

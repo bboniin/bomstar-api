@@ -14,12 +14,12 @@ class ListUsersService {
             }
         }
 
+        const usersTotal = await prismaClient.user.count(filter)
+
         if (!all) {
             filter["skip"] = page * 30
             filter["take"] = 30
         }
-
-        const usersTotal = await prismaClient.user.count(filter)
 
         const users = await prismaClient.user.findMany({
             ...filter,

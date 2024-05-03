@@ -3,30 +3,30 @@ import S3Storage from '../../utils/S3Storage';
 
 interface PostRequest {
     title: string;
-    image: string;
+    photo: string;
     text: string;
     admin_id: string;
 }
 
 class CreatePostService {
-    async execute({ title, text, image, admin_id }: PostRequest) {
+    async execute({ title, text, photo, admin_id }: PostRequest) {
 
-        if (!title || !text || !image) {
+        if (!title || !text || !photo) {
             throw new Error("Titulo, Texto e Imagem são obrigatórios")
         }
 
         const s3Storage = new S3Storage()
 
-        const upload = await s3Storage.saveFile(image)
+        const upload = await s3Storage.saveFile(photo)
 
-        const imageUp = upload
+        const photoUp = upload
 
         const post = await prismaClient.post.create({
             data: {
                 title: title,
                 text: text,
                 admin_id: admin_id,
-                image: imageUp
+                photo: photoUp
             },
         })
 

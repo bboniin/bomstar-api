@@ -20,7 +20,8 @@ class GetUserService {
                 status: true,
                 observation: true,
                 room_id: true,
-                photo: true
+                photo: true,
+                trunks: true
             }
         })
 

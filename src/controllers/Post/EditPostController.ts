@@ -8,20 +8,20 @@ class EditPostController {
 
         const { post_id } = req.params
 
-        let image = ""
+        let photo = ""
 
         if (req.file) {
-            image = req.file.filename
+            photo = req.file.filename
         }
 
         const editPostService = new EditPostService
 
         const post = await editPostService.execute({
-            title, text, post_id, image
+            title, text, post_id, photo
         })
 
-        if (post["image"]) {
-            post["image_url"] = "https://bomstar-data.s3.sa-east-1.amazonaws.com/" + post["image"];
+        if (post["photo"]) {
+            post["photo_url"] = "https://bomstar-data.s3.sa-east-1.amazonaws.com/" + post["photo"];
         }
 
         return res.json(post)

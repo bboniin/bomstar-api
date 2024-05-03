@@ -16,7 +16,7 @@ class SendActionController {
         const sendActionService = new SendActionService
 
         const user = await sendActionService.execute({
-            action_id, user_id, observation, image: photo
+            action_id, user_id, observation, photo
         })
 
         return res.json(user)

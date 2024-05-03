@@ -5,11 +5,11 @@ interface ActionRequest {
     user_id: string;
     action_id: string;
     observation: string;
-    image: string;
+    photo: string;
 }
 
 class SendActionService {
-    async execute({ user_id, observation, action_id, image}: ActionRequest) {
+    async execute({ user_id, observation, action_id, photo}: ActionRequest) {
 
         if (!user_id  || !action_id ) {
             throw new Error("Id do Usuário e da Ação são obrigatórios")
@@ -45,12 +45,12 @@ class SendActionService {
 
         }
         
-        if (image) {
+        if (photo) {
             const s3Storage = new S3Storage()
 
-            const upload = await s3Storage.saveFile(image)
+            const upload = await s3Storage.saveFile(photo)
 
-            data["image"] = upload
+            data["photo"] = upload
         }
 
         const action = await prismaClient.action.create({

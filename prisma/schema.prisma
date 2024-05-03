@@ -71,10 +71,11 @@ model Action {
   description   String
   observation   String?
   response      String?
-  image         String?
+  photo         String?
   reward        Int
   status        String    @default("pendente")
   created_at    DateTime? @default(now())  
+  updated_at    DateTime? @default(now())     
 
   user          User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id       String
@@ -82,32 +83,15 @@ model Action {
   @@map("actions")
 }
 
-model RoomTrunk {
-  id            String    @id @default(uuid())
-  name          String
-  description   String
-  reward_1      Int   
-  reward_2      Int    
-  reward_3      Int 
-  created_at    DateTime? @default(now())
-  updated_at    DateTime? @default(now()) 
-
-  room          Room  @relation(fields: [room_id], references: [id], onDelete: Cascade)
-  room_id       String
-
-  @@map("room_trunks")
-}
-
 model Trunk {
   id            String    @id @default(uuid())
   name          String
   description   String
-  reward_1      Int   
-  reward_2      Int    
-  reward_3      Int  
-  reward        Int      
+  rewards       String     
+  reward        Int 
   open          Boolean   @default(false) 
   created_at    DateTime? @default(now())
+  updated_at     DateTime? @default(now())
 
   user          User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id       String
@@ -119,27 +103,29 @@ model Room {
   id             String    @id @default(uuid())
   name           String  
   observation    String?
+  is_social      Boolean   @default(false)
   created_at     DateTime? @default(now())
   updated_at     DateTime? @default(now())
 
   users          User[]
   room_actions   RoomAction[]
-  room_trunks    RoomTrunk[]
 
   @@map("rooms")
 }
 
 model Rescue {
-  id            String    @id @default(uuid())
-  product_name  String
-  product_id    String
-  amount        String  
-  status        String    @default("pendente")
-  created_at    DateTime? @default(now())
-  updated_at    DateTime? @default(now())
+  id              String    @id @default(uuid())
+  amount          Int  
+  value           Int  
+  observation     String?
+  status          String    @default("pendente")
+  created_at      DateTime? @default(now())
+  updated_at      DateTime? @default(now())
 
-  user          User @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id       String
+  product         Product  @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  product_id      String
+  user            User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id         String
   
   @@map("rescues")
 }
@@ -148,19 +134,41 @@ model Transaction {
   id           String    @id @default(uuid())
   value        Int
   type         String   
+  description  String
+  message      String?
+  linked_id    String?
+  operation    String   
   created_at   DateTime? @default(now())
-
   user         User @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id      String
 
   @@map("transactions")
 }
 
+model Product {
+  id           String    @id @default(uuid())
+  name         String
+  description  String 
+  photo        String  
+  amount       Int
+  value        Int 
+  is_bomstar   Boolean
+  is_social    Boolean
+  visible      Boolean   @default(true)
+
+  created_at   DateTime? @default(now())
+  updated_at   DateTime? @default(now()) 
+
+  rescues       Rescue[]
+
+  @@map("products")
+}
+
 model Post {
   id           String    @id @default(uuid())
   title        String
   text         String 
-  image        String   
+  photo        String   
 
   created_at   DateTime? @default(now())
   updated_at   DateTime? @default(now()) 

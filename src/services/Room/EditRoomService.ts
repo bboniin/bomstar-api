@@ -4,10 +4,11 @@ interface RoomRequest {
     name: string;
     room_id: string;
     observation: string;
+    is_social: boolean;
 }
 
 class EditRoomService {
-    async execute({ name, room_id, observation }: RoomRequest) {
+    async execute({ name, room_id, is_social, observation }: RoomRequest) {
 
         if (!room_id || !name) {
             throw new Error("Id e Nome da Sala são obrigatórios")
@@ -30,6 +31,7 @@ class EditRoomService {
             },
             data: {
                 name: name,
+                is_social: is_social,
                 observation: observation
             },
         })

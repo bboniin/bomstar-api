@@ -12,8 +12,8 @@ class GetPostController {
             post_id
         })
 
-        if (post["image"]) {
-            post["image_url"] = "https://bomstar-data.s3.sa-east-1.amazonaws.com/" + post["image"];
+        if (post["photo"]) {
+            post["photo_url"] = "https://bomstar-data.s3.sa-east-1.amazonaws.com/" + post["photo"];
         }
 
         return res.json(post)

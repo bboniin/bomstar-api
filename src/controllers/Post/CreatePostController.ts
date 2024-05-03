@@ -6,10 +6,10 @@ class CreatePostController {
         
         const { title, text } = req.body
         
-        let image = ""
+        let photo = ""
 
         if (req.file) {
-            image = req.file.filename
+            photo = req.file.filename
         }
 
         let admin_id = req.userId
@@ -17,7 +17,7 @@ class CreatePostController {
         const createPostService = new CreatePostService
 
         const post = await createPostService.execute({
-            title, text, admin_id, image
+            title, text, admin_id, photo
         })
 
         return res.json(post)

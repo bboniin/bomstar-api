@@ -37,6 +37,25 @@ import { DeleteActionController } from './controllers/Action/DeleteActionControl
 import { AuthAdminController } from './controllers/Admin/AuthAdminController'
 import { CreateAdminController } from './controllers/Admin/CreateAdminController'
 import { DeleteRoomController } from './controllers/Room/DeleteRoomController'
+import { ListProductsController } from './controllers/Product/ListProductsController'
+import { CreateProductController } from './controllers/Product/CreateProductController'
+import { EditProductController } from './controllers/Product/EditProductController'
+import { DeleteProductController } from './controllers/Product/DeleteProductController'
+import { RankingRoomController } from './controllers/Room/RankingRoomController'
+import { UpdateStatusActionController } from './controllers/Action/UpdateStatusActionController'
+import { ListTransactionsController } from './controllers/Transactions/ListTransactionsController'
+import { ListTransactionsUserController } from './controllers/Transactions/ListTransactionsUserController'
+import { ListRescuesController } from './controllers/Rescue/ListRescuesController'
+import { CreateRescueController } from './controllers/Rescue/CreateRescueController'
+import { UpdateStatusRescueController } from './controllers/Rescue/UpdateStatusRescueController'
+import { ListRescuesPendingController } from './controllers/Rescue/ListRescuesPendingController'
+import { ListRescuesUserController } from './controllers/Rescue/ListRescuesUserController'
+import { BirthdayUsersController } from './controllers/User/BirthdayUsersController'
+import { HomeAdminController } from './controllers/Admin/HomeAdminController'
+import { ListTrunksController } from './controllers/Trunk/ListTrunksController'
+import { RescueTrunkController } from './controllers/Trunk/RescueTrunkController'
+import { SendTrunksController } from './controllers/Trunk/SendTrunksController'
+import { ListTrunksUserController } from './controllers/Trunk/ListTrunksUserController'
 
 const upload = multer(uploadConfig)
 
@@ -60,11 +79,24 @@ router.get('/actions', new ListActionsUserController().handle)
 router.get('/actions-room', new ListActionsRoomController().handle)
 router.post('/send-action', upload.single("file"), new SendActionController().handle)
 
+router.post('/rescue', new CreateRescueController().handle)
+
 router.get('/room/:room_id', new GetRoomController().handle)
+router.get('/ranking/:room_id', new RankingRoomController().handle)
+router.get('/products', new ListProductsController().handle)
+router.get('/transactions', new ListTransactionsUserController().handle)
+router.get('/rescues', new ListRescuesUserController().handle)
+
+router.get('/trunks', new ListTrunksUserController().handle)
+router.put('/trunk/:trunk_id', new RescueTrunkController().handle)
 
 router.use(isAdmin)
 
+router.get('/home', new HomeAdminController().handle)
 router.post('/admin', upload.single("file"), new CreateAdminController().handle)
+
+router.get('/trunks-admin', new ListTrunksController().handle)
+router.post('/trunks', new SendTrunksController().handle)
 
 router.get('/admin-post/:post_id', new GetPostController().handle)
 router.get('/admin-posts', new ListPostsController().handle)
@@ -77,8 +109,10 @@ router.put('/edit-user/:user_id', upload.single("file"), new AdminEditUserContro
 router.post('/create-user', upload.single("file"),  new AdminCreateUserController().handle)
 router.put('/status-user/:user_id', new UpdateStatusUserController().handle)
 
-router.post('/post', new CreatePostController().handle)
-router.put('/post/:post_id', new EditPostController().handle)
+router.get('/birthdays', new BirthdayUsersController().handle)
+
+router.post('/post', upload.single("file"), new CreatePostController().handle)
+router.put('/post/:post_id', upload.single("file"), new EditPostController().handle)
 router.delete('/post/:post_id', new DeletePostController().handle)
 
 router.get('/rooms', new ListRoomsController().handle)
@@ -86,12 +120,21 @@ router.post('/room', new CreateRoomController().handle)
 router.put('/room/:room_id', new EditRoomController().handle)
 router.delete('/room/:room_id', new DeleteRoomController().handle)
 
+router.post('/product', upload.single("file"), new CreateProductController().handle)
+router.put('/product/:product_id', upload.single("file"), new EditProductController().handle)
+router.delete('/product/:product_id', new DeleteProductController().handle)
+
 router.post('/action-room', new CreateActionController().handle)
 router.put('/action-room/:action_id', new EditActionController().handle)
 router.delete('/action-room/:action_id', new DeleteActionController().handle)
 
+router.get('/admin-transactions', new ListTransactionsController().handle)
+
 router.get('/actions-pending', new ListActionsPendingController().handle)
-router.put('/status-action/:action_id', new UpdateStatusUserController().handle)
+router.put('/status-action/:action_id', new UpdateStatusActionController().handle)
+
+router.get('/rescues-pending', new ListRescuesPendingController().handle)
+router.put('/status-rescue/:rescue_id', new UpdateStatusRescueController().handle)
 
 
 export { router }

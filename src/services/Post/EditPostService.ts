@@ -3,13 +3,13 @@ import S3Storage from '../../utils/S3Storage';
 
 interface PostRequest {
     title: string;
-    image: string;
+    photo: string;
     text: string;
     post_id: string;
 }
 
 class EditPostService {
-    async execute({ title, text, image, post_id }: PostRequest) {
+    async execute({ title, text, photo, post_id }: PostRequest) {
 
         if (!title || !text) {
             throw new Error("Titulo e Texto são obrigatórios")
@@ -30,15 +30,15 @@ class EditPostService {
             text: text,
         }
 
-        if (image) {
+        if (photo) {
             const s3Storage = new S3Storage()
 
-            const upload = await s3Storage.saveFile(image)
+            const upload = await s3Storage.saveFile(photo)
 
-            data["image"] = upload
+            data["photo"] = upload
 
-            if (post.image) {
-                await s3Storage.deleteFile(post.image)
+            if (post.photo) {
+                await s3Storage.deleteFile(post.photo)
             }
         }
 

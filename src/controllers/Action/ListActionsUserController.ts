@@ -14,6 +14,15 @@ class ListActionsUserController {
             user_id: user_id, page: Number(page) > 0 ? Number(page) : 0
         })
 
+        actionsUser.actions.map((item) => {
+            if (item.user["photo"]) {
+                item.user["photo_url"] = "https://bomstar-data.s3.sa-east-1.amazonaws.com/" + item.user["photo"];
+            }
+            if (item["photo"]) {
+                item["photo_url"] = "https://bomstar-data.s3.sa-east-1.amazonaws.com/" + item["photo"];
+            }
+        })
+
         return res.json(actionsUser)
     }
 }

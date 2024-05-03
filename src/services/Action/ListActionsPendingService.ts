@@ -21,6 +21,9 @@ class ListActionsPendingService {
             take: 30,
             orderBy: {
                 created_at: "asc"
+            },
+            include: {
+                user: true
             }
         })
 
