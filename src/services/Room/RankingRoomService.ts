@@ -18,7 +18,14 @@ class RankingRoomService {
 
         const transactions = await prismaClient.transaction.findMany({
             where: {
-                type: "action",
+                OR: [{
+                        type: "action",
+                    },{
+                        type: "bonus",
+                    },{
+                        type: "penalty",
+                    },
+                ],
                 created_at: {
                     gte: startOfMonth(new Date()),
                     lte: endOfMonth(new Date()),
@@ -34,9 +41,17 @@ class RankingRoomService {
         transactions.map(transaction => {
             const { user_id, value } = transaction;
             if (userTransactionTotal[user_id]) {
-                userTransactionTotal[user_id] += value;
+                if (transaction.type == "penalty") {
+                    userTransactionTotal[user_id] -= value;
+                } else {
+                    userTransactionTotal[user_id] += value;
+                }
             } else {
-                userTransactionTotal[user_id] = value;
+                if (transaction.type == "penalty") {
+                    userTransactionTotal[user_id] = -value;
+                } else {
+                    userTransactionTotal[user_id] = value;
+                }
             }
         });
 
@@ -46,6 +61,8 @@ class RankingRoomService {
             item.points = userTransactionTotal[item.id] || 0
             rankedUsers.push(item)
         })
+        
+        rankedUsers.sort((a, b) => b["points"] - a["points"])
 
         return rankedUsers
     }

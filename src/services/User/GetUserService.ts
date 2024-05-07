@@ -16,18 +16,24 @@ class GetUserService {
                 email: true,
                 phone_number: true,
                 points: true,
+                points_interactions: true,
                 birthday: true,
                 status: true,
                 observation: true,
                 room_id: true,
                 photo: true,
-                trunks: true
+                trunks: true,
+                bonuses: true,
+                penalties: true
             }
         })
 
         if (!user) {
             throw new Error("Usuário não encontrado")
         }
+
+        user["bonus"] = user.bonuses.length
+        user["penalty"] = user.penalties.length
 
         return (user)
     }

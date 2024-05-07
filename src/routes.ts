@@ -56,6 +56,20 @@ import { ListTrunksController } from './controllers/Trunk/ListTrunksController'
 import { RescueTrunkController } from './controllers/Trunk/RescueTrunkController'
 import { SendTrunksController } from './controllers/Trunk/SendTrunksController'
 import { ListTrunksUserController } from './controllers/Trunk/ListTrunksUserController'
+import { SendInteractionController } from './controllers/Interaction/SendInteractionController'
+import { ListInteractionsRoomController } from './controllers/Interaction/ListInteractionsRoomController'
+import { ListInteractionsUserController } from './controllers/Interaction/ListInteractionsUserController'
+import { CreateInteractionController } from './controllers/Interaction/CreateInteractionController'
+import { EditInteractionController } from './controllers/Interaction/EditInteractionController'
+import { DeleteInteractionController } from './controllers/Interaction/DeleteInteractionController'
+import { ListInteractionsController } from './controllers/Interaction/ListInteractionsController'
+import { LastedInteractionUserController } from './controllers/Interaction/LastedInteractionUserController'
+import { CreateBonusController } from './controllers/BonusAndPenalty/CreateBonusController'
+import { CreatePenaltyController } from './controllers/BonusAndPenalty/CreatePenaltyController'
+import { ListPenaltiesUserController } from './controllers/BonusAndPenalty/ListPenaltiesUserController'
+import { ListBonusesUserController } from './controllers/BonusAndPenalty/ListBonusesUserController'
+import { TransferPointsController } from './controllers/User/TransferPointsController'
+import { UpdateStatusInteractionController } from './controllers/Interaction/UpdateStatusInteractionController'
 
 const upload = multer(uploadConfig)
 
@@ -64,6 +78,8 @@ const router = Router()
 router.post('/session', new AuthUserController().handle)
 router.post('/session-admin', new AuthAdminController().handle)
 router.post('/user', upload.single("file"), new CreateUserController().handle)
+
+router.post('/admin', upload.single("file"), new CreateAdminController().handle)
 
 router.use(isAuthenticated)
 
@@ -79,6 +95,12 @@ router.get('/actions', new ListActionsUserController().handle)
 router.get('/actions-room', new ListActionsRoomController().handle)
 router.post('/send-action', upload.single("file"), new SendActionController().handle)
 
+router.get('/lasted-interaction', new LastedInteractionUserController().handle)
+router.get('/interactions', new ListInteractionsUserController().handle)
+router.get('/interactions-room', new ListInteractionsRoomController().handle)
+router.post('/send-interaction', upload.single("file"), new SendInteractionController().handle)
+router.put('/status-interaction/:interaction_id', new UpdateStatusInteractionController().handle)
+
 router.post('/rescue', new CreateRescueController().handle)
 
 router.get('/room/:room_id', new GetRoomController().handle)
@@ -90,11 +112,16 @@ router.get('/rescues', new ListRescuesUserController().handle)
 router.get('/trunks', new ListTrunksUserController().handle)
 router.put('/trunk/:trunk_id', new RescueTrunkController().handle)
 
+router.get('/bonuses', new ListBonusesUserController().handle)
+router.get('/penalties', new ListPenaltiesUserController().handle)
+
 router.use(isAdmin)
 
-router.get('/home', new HomeAdminController().handle)
-router.post('/admin', upload.single("file"), new CreateAdminController().handle)
+router.post('/transfer', new TransferPointsController().handle)
+router.post('/bonus', new CreateBonusController().handle)
+router.post('/penalty', new CreatePenaltyController().handle)
 
+router.get('/home', new HomeAdminController().handle)
 router.get('/trunks-admin', new ListTrunksController().handle)
 router.post('/trunks', new SendTrunksController().handle)
 
@@ -127,6 +154,11 @@ router.delete('/product/:product_id', new DeleteProductController().handle)
 router.post('/action-room', new CreateActionController().handle)
 router.put('/action-room/:action_id', new EditActionController().handle)
 router.delete('/action-room/:action_id', new DeleteActionController().handle)
+
+router.get('/admin-interactions', new ListInteractionsController().handle)
+router.post('/interaction-room', new CreateInteractionController().handle)
+router.put('/interaction-room/:interaction_id', new EditInteractionController().handle)
+router.delete('/interaction-room/:interaction_id', new DeleteInteractionController().handle)
 
 router.get('/admin-transactions', new ListTransactionsController().handle)
 

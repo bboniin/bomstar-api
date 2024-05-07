@@ -41,8 +41,8 @@ class ListProductsService {
                 where: {
                     visible: true
                 },
-                skip: page * 1,
-                take: 1,
+                skip: page * 30,
+                take: 30,
             }
         }
 

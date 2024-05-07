@@ -16,6 +16,7 @@ class AdminGetUserService {
                 email: true,
                 phone_number: true,
                 points: true,
+                points_interactions: true,
                 birthday: true,
                 photo: true,
                 room: true,

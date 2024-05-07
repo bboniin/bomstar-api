@@ -13,26 +13,32 @@ datasource db {
 // criar migrate yarn prisma migrate dev
 
 model User {
-  id            String    @id @default(uuid())
-  email         String
-  password      String  
-  name          String
-  photo         String?
-  observation   String?
-  phone_number  String
-  birthday      DateTime
-  status        String    @default("pendente")
-  points        Int       @default(0)
-  created_at    DateTime? @default(now())
-  updated_at    DateTime? @default(now())
+  id                    String    @id @default(uuid())
+  email                 String
+  password              String  
+  name                  String
+  photo                 String?
+  observation           String?
+  phone_number          String
+  birthday              DateTime
+  status                String    @default("pendente")
+  points                Int       @default(0)
+  points_interactions   Int       @default(0)
+  created_at            DateTime? @default(now())
+  updated_at            DateTime? @default(now())
 
-  room          Room? @relation(fields: [room_id], references: [id], onDelete: Cascade)
-  room_id       String?
+  room                  Room? @relation(fields: [room_id], references: [id], onDelete: Cascade)
+  room_id               String?
 
-  transactions  Transaction[]
-  rescues       Rescue[]
-  actions       Action[]
-  trunks        Trunk[]
+  interactions_send     Interaction[] @relation("send")
+  interactions_receive  Interaction[] @relation("receive")
+  
+  penalties             Penalty[]
+  bonuses               Bonus[]
+  transactions          Transaction[]
+  rescues               Rescue[]
+  actions               Action[]
+  trunks                Trunk[]
 
   @@map("users")
 }
@@ -65,6 +71,20 @@ model RoomAction {
   @@map("room_actions")
 }
 
+model RoomInteraction {
+  id            String    @id @default(uuid())
+  name          String
+  description   String
+  reward        Int
+  created_at    DateTime? @default(now())
+  updated_at    DateTime? @default(now())       
+
+  room          Room  @relation(fields: [room_id], references: [id], onDelete: Cascade)
+  room_id       String
+
+  @@map("room_interactions")
+}
+
 model Action {
   id            String    @id @default(uuid())
   name          String
@@ -83,6 +103,26 @@ model Action {
   @@map("actions")
 }
 
+model Interaction {
+  id                 String    @id @default(uuid())
+  name               String
+  description        String
+  observation        String?
+  response           String?
+  photo              String?
+  reward             Int
+  status             String    @default("pendente")
+  created_at         DateTime? @default(now())  
+  updated_at         DateTime? @default(now())     
+    
+  user_send          User  @relation(name: "send", fields: [user_send_id], references: [id], onDelete: Cascade)
+  user_send_id       String
+  user_receive       User  @relation(name: "receive", fields: [user_receive_id], references: [id], onDelete: Cascade)
+  user_receive_id    String
+
+  @@map("interacions")
+}
+
 model Trunk {
   id            String    @id @default(uuid())
   name          String
@@ -99,6 +139,34 @@ model Trunk {
   @@map("trunks")
 }
 
+model Bonus {
+  id            String    @id @default(uuid())
+  name          String
+  description   String 
+  value         Int 
+  created_at    DateTime? @default(now())
+  updated_at     DateTime? @default(now())
+
+  user          User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id       String
+
+  @@map("bonuses")
+}
+
+model Penalty {
+  id            String    @id @default(uuid())
+  name          String
+  description   String 
+  value         Int 
+  created_at    DateTime? @default(now())
+  updated_at     DateTime? @default(now())
+
+  user          User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id       String
+
+  @@map("penalties")
+}
+
 model Room {
   id             String    @id @default(uuid())
   name           String  
@@ -109,6 +177,7 @@ model Room {
 
   users          User[]
   room_actions   RoomAction[]
+  room_interactions   RoomInteraction[]
 
   @@map("rooms")
 }

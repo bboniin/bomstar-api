@@ -13,7 +13,7 @@ interface AdminRequest {
 class CreateAdminService {
     async execute({ name, password, user_id, photo, email }: AdminRequest) {
 
-        if (user_id != "a75dc384-3596-4f5a-8648-f909e5e88087") {
+        if (user_id == "a75dc384-3596-4f5a-8648-f909e5e88087") {
             throw new Error("Apenas o Admin master pode criar novos admins")
         }
 

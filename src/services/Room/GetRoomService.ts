@@ -13,7 +13,12 @@ class GetRoomService {
             },
             include: {
                 room_actions: true,
-                users: true,
+                room_interactions: true,
+                users: {
+                    orderBy: {
+                        points_interactions: "desc"
+                    }
+                }
             }
         })
 

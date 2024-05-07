@@ -24,6 +24,7 @@ class ListRoomsService {
             },
             include: {
                 room_actions: true,
+                room_interactions: true,
                 users: true
             }
         })
