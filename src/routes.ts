@@ -70,6 +70,7 @@ import { ListPenaltiesUserController } from './controllers/BonusAndPenalty/ListP
 import { ListBonusesUserController } from './controllers/BonusAndPenalty/ListBonusesUserController'
 import { TransferPointsController } from './controllers/User/TransferPointsController'
 import { UpdateStatusInteractionController } from './controllers/Interaction/UpdateStatusInteractionController'
+import { UserTransferPointsController } from './controllers/User/UserTransferPointsController'
 
 const upload = multer(uploadConfig)
 
@@ -111,6 +112,8 @@ router.get('/rescues', new ListRescuesUserController().handle)
 
 router.get('/trunks', new ListTrunksUserController().handle)
 router.put('/trunk/:trunk_id', new RescueTrunkController().handle)
+
+router.post('/transfer/:user_id', new UserTransferPointsController().handle)
 
 router.get('/bonuses', new ListBonusesUserController().handle)
 router.get('/penalties', new ListPenaltiesUserController().handle)

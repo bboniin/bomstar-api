@@ -26,8 +26,6 @@ class LastedInteractionUserService {
             },
         })
 
-        console.log(format(new Date(), "dd/MM/yyyy HH:mm"))
-
         return interaction
     }
 }
