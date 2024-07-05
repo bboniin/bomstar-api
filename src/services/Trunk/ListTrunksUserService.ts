@@ -19,7 +19,7 @@ class ListTrunksUserService {
                 user_id: user_id
             },
             orderBy: {
-                created_at: "asc"
+                created_at: "desc"
             }
         })
 

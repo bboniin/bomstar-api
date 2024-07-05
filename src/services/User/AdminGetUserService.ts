@@ -21,7 +21,11 @@ class AdminGetUserService {
                 photo: true,
                 room: true,
                 room_id: true,
-                transactions: true,
+                transactions: {
+                    orderBy: {
+                        created_at: "desc"
+                    }
+                },
                 actions: true
             }
         })

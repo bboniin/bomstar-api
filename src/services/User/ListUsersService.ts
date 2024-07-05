@@ -24,7 +24,7 @@ class ListUsersService {
         const users = await prismaClient.user.findMany({
             ...filter,
             orderBy: {
-                created_at: "asc"
+                name: "asc"
             }
         })
 

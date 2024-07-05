@@ -22,7 +22,7 @@ class ListPostsService {
             skip: home ? 0 : page * 12,
             take: home ? 3 : 12,
             orderBy: {
-                created_at: "asc"
+                created_at: "desc"
             },
         })
 

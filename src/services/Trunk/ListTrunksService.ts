@@ -28,7 +28,7 @@ class ListTrunksService {
             skip: page * 30,
             take: 30,
             orderBy: {
-                created_at: "asc"
+                created_at: "desc"
             },
             include: {
                 user: true,

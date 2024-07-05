@@ -20,12 +20,16 @@ class ListRoomsService {
         const rooms = await prismaClient.room.findMany({
             ...filter,
             orderBy: {
-                created_at: "asc"
+                created_at: "desc"
             },
             include: {
                 room_actions: true,
                 room_interactions: true,
-                users: true
+                users: {
+                    orderBy: {
+                        name: "asc"
+                    },
+                }
             }
         })
 

@@ -71,6 +71,8 @@ import { ListBonusesUserController } from './controllers/BonusAndPenalty/ListBon
 import { TransferPointsController } from './controllers/User/TransferPointsController'
 import { UpdateStatusInteractionController } from './controllers/Interaction/UpdateStatusInteractionController'
 import { UserTransferPointsController } from './controllers/User/UserTransferPointsController'
+import { CreateMultiBonusController } from './controllers/BonusAndPenalty/CreateMultiBonusController'
+import { CreateMultiPenaltyController } from './controllers/BonusAndPenalty/CreateMultiPenaltyController'
 
 const upload = multer(uploadConfig)
 
@@ -123,6 +125,9 @@ router.use(isAdmin)
 router.post('/transfer', new TransferPointsController().handle)
 router.post('/bonus', new CreateBonusController().handle)
 router.post('/penalty', new CreatePenaltyController().handle)
+
+router.post('/bonus-room', new CreateMultiBonusController().handle)
+router.post('/penalty-room', new CreateMultiPenaltyController().handle)
 
 router.get('/home', new HomeAdminController().handle)
 router.get('/trunks-admin', new ListTrunksController().handle)

@@ -16,7 +16,7 @@ class GetRoomService {
                 room_interactions: true,
                 users: {
                     orderBy: {
-                        points_interactions: "desc"
+                        name: "asc"
                     }
                 }
             }

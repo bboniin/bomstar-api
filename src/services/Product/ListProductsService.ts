@@ -53,7 +53,7 @@ class ListProductsService {
         const products = await prismaClient.product.findMany({
             ...filter,
             orderBy: {
-                created_at: "asc"
+                created_at: "desc"
             }
         })
 
