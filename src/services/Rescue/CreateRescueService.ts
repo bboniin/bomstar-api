@@ -37,6 +37,10 @@ class CreateRescueService {
             throw new Error("Pontos insuficientes para resgate") 
         }
 
+        if (amount >  product.amount) {
+            throw new Error("Produto sem estoque para resgate") 
+        }
+
         await prismaClient.transaction.create({
             data: {
                 value: amount * product.value,
